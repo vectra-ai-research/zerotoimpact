@@ -55,12 +55,17 @@ npm run dev
 **Note**: The Flask server will be running on http://127.0.0.1:5328 – feel free to change the port in ***package.json'*** (you'll also need to update it in ***'next.config.js'***).
 
 
-
-
 ## Usage
 - **Explore Attack Scenarios:** Use the interactive interface to explore different attack scenarios categorized by MITRE ATT&CK tactics.
 
 - **Analyze Attack Paths:** Analyze the progression of attacks from initial compromise to lateral movement and exfiltration.
 
 - **Mitigate Attacks:** Implement mitigation strategies based on the insights gained from analyzing attack paths.
+
+## Acknowledgments
+
+Maintainer: [@alexgroyz](https://twitter.com/nightmareJs)
+
+## Contact
+If you found this tool useful, want to share an interesting use-case, bring issues to attention, whatever the reason - share them. You can email at: agroyz@vectra.ai.
 
