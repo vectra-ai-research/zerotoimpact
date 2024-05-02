@@ -1,8 +1,5 @@
 <h1 align="center">
-    <img src="https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png" height="96">
-    <br>
     ZeroToImpact
-    <br>
 </h1>
 <h4 align="center">The <b>ZeroToImpact</b> Project: Simulate, understand, and mitigate cybersecurity threats from inception to impact.
 </h4>
@@ -25,9 +22,15 @@ python3 -m venv .venv
 ```
 **3. Activate the Virtual Environment:**
 
-```bash
+***Windows***
+```powershell
 .venv/Scripts/activate
 ```
+***Linux***
+```bash
+source .venv/bin/activate
+```
+
 **4. Install Dependencies:**
 
 ```bash
@@ -35,7 +38,7 @@ npm install
 ```
 **5. Set Enviroment Variable:**
 
-***Windown***
+***Windows***
 ```powershell
 $env:AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
 ```
