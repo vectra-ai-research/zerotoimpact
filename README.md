@@ -38,6 +38,9 @@ npm install
 ```
 **5. Set Enviroment Variable:**
 
+***AWS Profile Permissions***
+The AWS profile requires AdministratorAccess permission to deploy the vulnerable infrastructure. However, the profile will not be used to execute the attacks 
+
 ***Windows***
 ```powershell
 $env:AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
