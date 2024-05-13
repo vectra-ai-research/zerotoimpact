@@ -12,7 +12,6 @@ An interactive, web-based educational platform meticulously crafted to emulate c
 
 
 ## Setup Instructions
-## Setup Instructions
 **1. Install Node.js, Python, and AWS CLI:** If not already installed, download and install [Node.js](https://nodejs.org/en/download), [Python](https://www.python.org/downloads/), [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 **2. Create a Python Virtual Environment:**
