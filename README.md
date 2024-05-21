@@ -67,6 +67,18 @@ npm run dev
 
 - **Mitigate Attacks:** Implement mitigation strategies based on the insights gained from analyzing attack paths.
 
+
+## Troubleshooting
+
+If an error occurs, the application's **Activity Log** section will notify you and may suggest destroying resources created during the attack. It's crucial to remove these resources to avoid unnecessary charges and because you must destroy the resources before rerunning the attack with the same username.
+
+**Important:** Before destroying resources, navigate to the application directory and retrieve the logs from the current application run. Destroying resources through the application also wipes out these logs.
+
+Logs can be found in the `api/{attack_emulation}/instances` directory as a JSON file. 
+
+For example, logs generated during the 'IAM Policy Rollback to S3 Ransomware via KMS key' attack emulation are located in the `api/policy_ransom_exploit/instances` directory.
+
+
 ## Acknowledgments
 
 Maintainer: [@alexgroyz](https://twitter.com/nightmareJs)
