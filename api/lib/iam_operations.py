@@ -2,6 +2,7 @@ import requests
 import json
 import boto3
 from urllib.parse import quote_plus, urlencode
+import lib.sanitize
 
 def is_profile_admin(profile_name):
     session = boto3.Session(profile_name=profile_name)
@@ -140,11 +141,16 @@ def create_access_key(client, user_name, exchange, logs, resources):
     try:
         response = client.create_access_key(UserName=user_name)
 
-        exchange.append({"operation" : "create iam user credentials", "response": response})
         logs.append(f"Access key created for user {user_name}.")
         resources['iam_credentials'].append({"userAccessKey": user_name, 
-                                        "accessKeyId" : response['AccessKey']['AccessKeyId'], 
-                                        "secretAccessKey": response['AccessKey']['SecretAccessKey']})
+                                             "accessKeyId" : response['AccessKey']['AccessKeyId'], 
+                                             "secretAccessKey": response['AccessKey']['SecretAccessKey']})
+        
+        obfuscated_response = lib.sanitize.obfuscate_access_key(response)
+        
+        exchange.append({"operation" : "create iam user credentials", "response": obfuscated_response})
+
+
         return response
     except Exception as e:
         print(f"Error creating access key for user {user_name}: {e}")
