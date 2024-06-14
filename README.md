@@ -4,7 +4,7 @@
 <h4 align="center">The <b>ZeroToImpact</b> Project: Simulate, understand, and mitigate cybersecurity threats from inception to impact.
 </h4>
 
-![zti](https://github-production-user-asset-6210df.s3.amazonaws.com/140458593/311934035-f66a6390-8ce1-4bce-9e56-e2f3f4d906db.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20240614%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240614T180305Z&X-Amz-Expires=300&X-Amz-Signature=03e6a4a973d72953e4fea32d18f429da58e7083a3f99f7f597e04972022eb86f&X-Amz-SignedHeaders=host&actor_id=90977809&key_id=0&repo_id=751080227)
+![zti](./images/zti.gif)
 
 <p align="center">
 An interactive, web-based educational platform meticulously crafted to emulate cyberattacks across cloud environments, providing a comprehensive understanding of attack methodologies and defense strategies. Featuring a seamless one-click attack initiation, our dedicated application delivers a user-friendly, hands-on learning experience tailored to attack emulation, empowering users to explore, simulate, and analyze cyber threats from inception to resolution.
