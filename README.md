@@ -4,7 +4,7 @@
 <h4 align="center">The <b>ZeroToImpact</b> Project: Simulate, understand, and mitigate cybersecurity threats from inception to impact.
 </h4>
 
-![zti](https://github.com/agroyz/zerotoimpact/assets/140458593/f66a6390-8ce1-4bce-9e56-e2f3f4d906db)
+![zti](https://github-production-user-asset-6210df.s3.amazonaws.com/140458593/311934035-f66a6390-8ce1-4bce-9e56-e2f3f4d906db.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20240614%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240614T180305Z&X-Amz-Expires=300&X-Amz-Signature=03e6a4a973d72953e4fea32d18f429da58e7083a3f99f7f597e04972022eb86f&X-Amz-SignedHeaders=host&actor_id=90977809&key_id=0&repo_id=751080227)
 
 <p align="center">
 An interactive, web-based educational platform meticulously crafted to emulate cyberattacks across cloud environments, providing a comprehensive understanding of attack methodologies and defense strategies. Featuring a seamless one-click attack initiation, our dedicated application delivers a user-friendly, hands-on learning experience tailored to attack emulation, empowering users to explore, simulate, and analyze cyber threats from inception to resolution.
@@ -14,12 +14,17 @@ An interactive, web-based educational platform meticulously crafted to emulate c
 ## Setup Instructions
 **1. Install Node.js, Python, and AWS CLI:** If not already installed, download and install [Node.js](https://nodejs.org/en/download), [Python](https://www.python.org/downloads/), [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-**2. Create a Python Virtual Environment:**
+**2. Navigate to the application directory:**
+```powershell
+cd .\zerotoimpact\
+```
+
+**3. Create a Python Virtual Environment:**
 
 ```powershell
 python3 -m venv .venv
 ```
-**3. Activate the Virtual Environment:**
+**4. Activate the Virtual Environment:**
 
 ***Windows***
 ```powershell
@@ -30,12 +35,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-**4. Install Dependencies:**
+**5. Install Dependencies:**
 
 ```bash
 npm install
 ```
-**5. Set Enviroment Variable:**
+**6. Set Enviroment Variable:**
 
 ***AWS Profile Permissions***
 The AWS profile requires AdministratorAccess permission to deploy the vulnerable infrastructure. However, the profile will not be used to execute the attacks 
@@ -49,13 +54,13 @@ $env:AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
 export AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
 ```
 
-**6. Run the Development Server:**
+**7. Run the Development Server:**
 
 ```bash
 npm run dev
 ```
 
-**6. Access the Application:** Open http://localhost:3000 in your browser to access the application.
+**8. Access the Application:** Open http://localhost:3000 in your browser to access the application.
 
 **Note**: The Flask server will be running on http://127.0.0.1:5328 – feel free to change the port in ***package.json'*** (you'll also need to update it in ***'next.config.js'***).
 

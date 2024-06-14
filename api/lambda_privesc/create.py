@@ -4,6 +4,7 @@ import os
 import time
 from lib.instance_repo import add_to_disk
 from lib.iam_operations import create_client_profile
+import lib.sanitize
 
 iam_policy = {
     "Version": "2012-10-17",
@@ -72,7 +73,7 @@ class CreateLambdaPriEsc:
         
         try:
             self.step = 1
-            user_name = f"sean-{self.id}"
+            user_name = f"sean@zti.com-{self.id}"
             policy_arn = self.create_policy(f"sean-policy-{self.id}", iam_policy)
             self._add_to_disk()
             
@@ -166,11 +167,14 @@ class CreateLambdaPriEsc:
     def create_access_key(self, user_name):
         response = self.client.create_access_key(UserName=user_name)
 
-        self.exchange.append(response)
+        
         self.logs.append(f"Access key created for user {user_name}.")
         self.resources.append({"userAccessKey": user_name, 
                                         "accessKeyId" : response['AccessKey']['AccessKeyId'], 
                                         "secretAccessKey": response['AccessKey']['SecretAccessKey']})
+        obfuscated_response = lib.sanitize.obfuscate_access_key(response)
+        self.exchange.append(obfuscated_response)
+        
         return response['AccessKey']
          
     def create_ssm_parameters(self):
