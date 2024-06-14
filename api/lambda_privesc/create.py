@@ -73,7 +73,7 @@ class CreateLambdaPriEsc:
         
         try:
             self.step = 1
-            user_name = f"sean-{self.id}"
+            user_name = f"sean@zti.com-{self.id}"
             policy_arn = self.create_policy(f"sean-policy-{self.id}", iam_policy)
             self._add_to_disk()
             

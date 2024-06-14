@@ -142,7 +142,7 @@ export const CREATE_INFRASTRUCTURE_PIPELINE: AttackPipeline = {
       description: {
         title: "EC2 Instance",
         content:
-          "Launching an EC2 instance that will later have its instance profile compromised by the attacker.",
+          "This will take while! Launching an EC2 instance that will later have its instance profile compromised by the attacker.",
       },
     },
     {
@@ -151,7 +151,7 @@ export const CREATE_INFRASTRUCTURE_PIPELINE: AttackPipeline = {
       description: {
         title: "zti-db-instance-id",
         content:
-          "Launching an RDS instance from which a snapshot will be created.",
+          "This will take while! Launching an RDS instance from which a snapshot will be created.",
       },
     },
     {
@@ -160,7 +160,7 @@ export const CREATE_INFRASTRUCTURE_PIPELINE: AttackPipeline = {
       description: {
         title: "zti-db-snapshot-id",
         content:
-          "Creating an RDS snapshot that will be shared with an external account under the attacker's control.",
+          "This will take while! Creating an RDS snapshot that will be shared with an external account under the attacker's control.",
       },
     },
   ]

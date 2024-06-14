@@ -49,3 +49,4 @@ out.txt
 api/index_tests.py
 api/policy_ransom_exploit/instances
 api/index_test.py
+.env
