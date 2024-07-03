@@ -169,15 +169,6 @@ export const CREATE_INFRASTRUCTURE_PIPELINE: AttackPipeline = {
 export const ATTACK_PIPELINE: AttackPipeline = {
   1: [
     {
-      title: "Initial Access",
-      imageSrc: images.emptyImage,
-      description: {
-        title: "Valid Accounts (T1078)",
-        content:
-          "The attacker initially uses compromised AWS credentials to gain access to the environment. This technique is utilized when attackers leverage legitimate but stolen credentials to gain initial foothold in the cloud environment.",
-      },
-    },
-    {
       title: "Discovery (step 1)",
       imageSrc: images.emptyImage,
       description: {
@@ -196,28 +187,19 @@ export const ATTACK_PIPELINE: AttackPipeline = {
       },
     },
     {
-      title: "Defense Evasion",
+      title: "Privilege Escalation",
       imageSrc: images.emptyImage,
       description: {
         title: "Modify Cloud Compute Infrastructure (T1578)",
         content:
-          "By creating a Lambda function with the intention to modify IAM policies, the attacker aims to evade defenses. The use of a legitimate service (AWS Lambda) to perform malicious actions helps in staying under the radar.",
+          "The attacker deploys a Lambda function to modify IAM policies, leveraging AWS Lambda's legitimate service to perform privilege escalation and execute malicious actions undetected in a serverless environment.",
       },
     },
     {
-      title: "Execution",
+      title: "Lateral Movement",
       imageSrc: images.emptyImage,
       description: {
-        title: "Serverless Execution (T1530)",
-        content:
-          "The attacker deploys and executes a Lambda function to perform the intended malicious actions. This demonstrates the execution of code in a serverless environment to achieve their objectives.",
-      },
-    },
-    {
-      title: "Persistence",
-      imageSrc: images.emptyImage,
-      description: {
-        title: "Account Manipulation (T1098)",
+        title: "Cloud Service Dashboard (T1538)",
         content:
           "Creating new AWS console login credentials for themselves, with elevated permissions, ensures that the attacker maintains access to the environment even if the original compromised credentials are discovered and revoked",
       },

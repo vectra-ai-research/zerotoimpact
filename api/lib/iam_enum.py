@@ -116,6 +116,15 @@ class IAMEnum:
             response = self._client('iam').list_policy_versions(PolicyArn=policy_arn)
             logs.append("Policy versions listed successfully.")
 
+            all_versions = []
+            for version in response['Versions']:
+                version_id = version['VersionId']
+                logs.append(f"Retrieving policy version: {version_id}")
+                version_response = self._client('iam').get_policy_version(PolicyArn=policy_arn, VersionId=version_id)
+                all_versions.append(version_response['PolicyVersion']['Document'])
+
+            exchange.append({'all_versions': all_versions})
+            
             # Determine the default version ID directly from the list
             default_version_id = None
             for version in response['Versions']:
@@ -126,7 +135,7 @@ class IAMEnum:
             if default_version_id:
                 logs.append(f"Retrieving default policy version: {default_version_id}")
                 response = self._client('iam').get_policy_version(PolicyArn=policy_arn, VersionId=default_version_id)
-                exchange.append( response['PolicyVersion']['Document'])
+                exchange.append({'default_version': response['PolicyVersion']['Document']})
                 logs.append(f"Default policy version {default_version_id} retrieved successfully.")
                 return response
             else:
@@ -170,6 +179,10 @@ class IAMEnum:
             logs.append(f"List policies attached to {user_name}")
         except Exception as e:
             exchange.append(f"Error listing attached user policies: {e}")
+
+    
+
+         
 
 
 def role_recon_sts_token(access_key, secret_key,  token, region, exchange_logs):
