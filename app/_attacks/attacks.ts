@@ -234,21 +234,21 @@ export const ATTACK_PIPELINE: AttackPipeline = {
       }
     },
     {
-      title: "Impact",
+      title: "Persistence",
       imageSrc: images.emptyImage,
       description: {
-        title: "Data Encrypted for Impact (T1486) & Data Destruction (T1485)",
+        title: "Create Account (T1136) ",
         content:
-          "This will take while! The attacker encrypts data in S3 buckets, impacting its availability and integrity. Deleting the original objects from the source bucket after moving them ensures the data cannot be easily recovered.",
+          "To achieve persistence and avoid losing access, the attacker creates a privileged IAM user with S3 admin permissions and grants this user access to encrypt data using an AWS KMS key controlled by the attacker",
       }
     },
     {
-      title: "Exfiltration",
+      title: "Impact & Exfiltration",
       imageSrc: images.emptyImage,
       description: {
-        title: "Transfer Data to Cloud Account (T1537)",
+        title: "Data Encrypted for Impact (T1486) & Transfer Data to Cloud Account (T1537)",
         content:
-          "The attacker moves encrypted objects to a different S3 bucket controlled by them, effectively exfiltrating the data.",
+          "The attacker encrypts data in S3 buckets, impacting its availability and integrity, and moves the encrypted objects to a different S3 bucket controlled by them, effectively exfiltrating the data; deleting the original objects from the source bucket after moving them ensures the data cannot be easily recovered.",
       }
     },
   ],
