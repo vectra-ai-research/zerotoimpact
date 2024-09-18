@@ -51,12 +51,12 @@ This application currently supports only the us-east-1 AWS region. Please ensure
 ***Windows***
 ```powershell
 $env:AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
-$env:AWS_DEFAULT_PROFILE="your_aws_cli_region_to_use"
+$env:AWS_DEFAULT_REGION="us-east-1"
 ```
 ***Linux***
 ```bash
 export AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
-export AWS_DEFAULT_PROFILE="your_aws_cli_region_to_use"
+export AWS_DEFAULT_REGION="us-east-1"
 ```
 
 **7. Run the Development Server:**
