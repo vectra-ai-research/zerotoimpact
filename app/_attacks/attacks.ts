@@ -48,7 +48,7 @@ export const ATTACK_LIST: Attack[] = [
     id: 2,
     name: "IAM Policy Rollback to S3 Ransomware via KMS key",
     description:
-      "In this scenario, an attacker with initial, limited access under the IAM user exploits the SetDefaultPolicyVersion permission to escalate privileges by restoring an old policy version that grants full admin rights. With elevated privileges, the attacker creates a new IAM user with S3 admin permissions, then enumerates and targets S3 buckets. The final step involves encrypting objects in the S3 buckets with an attacker-controlled KMS key and deleting the original objects, compromising data integrity and availability and potentially causing a significant impact on the organization's operations. This sophisticated attack chain systematically exploits cloud configurations for privilege escalation and executing a malicious agenda.",
+      "In this scenario, an attacker with initial, limited access under the IAM user exploits the SetDefaultPolicyVersion permission to escalate privileges by restoring an old policy version that grants full admin rights. With elevated privileges, the attacker creates a new IAM user with S3 admin permissions, then enumerates and targets S3 buckets. The final step involves retrieving objects from the S3 buckets and overwriting them with an attacker-controlled KMS key, effectively locking out legitimate access while maintaining control over the encrypted data. This tactic compromises data confidentiality and availability, potentially disrupting business operations and making recovery significantly more challenging. This sophisticated attack chain systematically exploits cloud misconfigurations for privilege escalation and executing a malicious agenda",
     platform: "AWS",
     createEndpoint: "policy_ransom_exploit_create",
     statusEndpoint: "policy_ransom_exploit_status",
@@ -248,7 +248,7 @@ export const ATTACK_PIPELINE: AttackPipeline = {
       description: {
         title: "Data Encrypted for Impact (T1486) & Transfer Data to Cloud Account (T1537)",
         content:
-          "The attacker encrypts data in S3 buckets, impacting its availability and integrity, and moves the encrypted objects to a different S3 bucket controlled by them, effectively exfiltrating the data; deleting the original objects from the source bucket after moving them ensures the data cannot be easily recovered.",
+          "The attacker encrypts data in S3 buckets using an attacker-controlled KMS key, impacting its availability and integrity. They then overwrite the existing objects with the newly encrypted versions, effectively locking out legitimate access while maintaining control over the data. By leveraging unauthorized encryption, the attacker ensures that even though the objects remain in place, they are inaccessible without the attacker's key, making recovery difficult and potentially disrupting business operations",
       }
     },
   ],
