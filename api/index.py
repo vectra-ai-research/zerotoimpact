@@ -17,7 +17,8 @@ else:
     # Instead of printing, we raise an exception
     raise Exception(f"AWS_DEFAULT_PROFILE is not set.")
 
-aws_region = 'us-east-1'
+aws_region = os.environ['AWS_DEFAULT_REGION']
+print("Value from aws_region:",aws_region)
 
 @app.route('/api/lambda_privesc_create/<id>')
 @cross_origin()

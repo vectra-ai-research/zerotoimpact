@@ -26,7 +26,7 @@ export const ATTACK_USERNAME_LOCAL_STORAGE_KEY = "ATTACK_USERNAME";
 const Home = () => {
   const [username, setUsername] = React.useState("");
   const [localStorageUsername, setLocalStorageUsername] = React.useState<string | null>(null);
-  const [appIsReady, setAppIsReady] = React.useState<Boolean>();
+  const [appIsReady, setAppIsReady] = React.useState<Boolean>(false);
 
   React.useEffect(() => {
     setAppIsReady(true);

@@ -8,7 +8,7 @@ class DestroyLambdaPriEsc:
         self.id = id
         self.profile = profile
         self.logs =  []
-        self.aws_region = 'us-east-1'
+        self.aws_region = os.environ['AWS_DEFAULT_REGION']
         self.instance = instance
         self.resources = instance['resources']
         self.resources_v2 = instance['resourcesV2']

@@ -54,7 +54,7 @@ debug_role_document = {
 class CreateLambdaPriEsc:
     def __init__(self, id, profile, pathToDisk):
         self.id = id
-        self.aws_region = 'us-east-1'
+        self.aws_region = os.environ['AWS_DEFAULT_REGION']
         self.profile = profile 
         session = boto3.Session(profile_name=profile)
         self.client = session.client('iam')

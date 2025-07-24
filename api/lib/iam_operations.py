@@ -167,7 +167,7 @@ def attach_policy_to_user(client, user_name, policy_arn, exchange, logs, resourc
         logs.append(f"Error attaching policy: {e}")
 
 def get_profile_account_id(profile):
-    client = create_client_profile('sts', 'us-east-1', profile)
+    client = create_client_profile('sts', 'ap-southeast-3', profile)
     caller_identity = client.get_caller_identity()
     account_number = caller_identity['Account']
     return account_number
