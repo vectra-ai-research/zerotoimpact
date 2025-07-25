@@ -1,6 +1,7 @@
 import requests
 import json
 import boto3
+import os
 from urllib.parse import quote_plus, urlencode
 import lib.sanitize
 
@@ -20,18 +21,28 @@ def is_profile_admin(profile_name):
             print(f"An error occurred: {error.response['Error']['Message']}")
         return False
 
-def assume_role(access_key_id, secret_access_key, role_arn, session_name, exchange, logs):
+def assume_role(access_key_id, secret_access_key, role_arn, session_name, exchange, logs, region=None):
+    if region is None:
+        region = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
     print(f"Assuming role: Role ARN = {role_arn}, Session Name = {session_name}")
     try:
         # Create an STS client with the provided credentials
         sts_client = boto3.client(
             'sts',
+            region_name=region,
             aws_access_key_id=access_key_id,
             aws_secret_access_key=secret_access_key
         )
         response = sts_client.assume_role(RoleArn=role_arn, RoleSessionName=session_name)
         credentials = response['Credentials']
-        exchange.append(credentials)
+        sanitized_credentials = {
+            "AccessKeyId": credentials['AccessKeyId'],
+            "SecretAccessKey": credentials['SecretAccessKey'],
+            "SessionToken": credentials['SessionToken'],
+            "Expiration": credentials['Expiration'].isoformat() if 'Expiration' in credentials else None
+        }
+        exchange.append(sanitized_credentials)
+
 
         logs.append(f"Successfully assumed role")
 
@@ -41,12 +52,15 @@ def assume_role(access_key_id, secret_access_key, role_arn, session_name, exchan
             'SessionToken': credentials['SessionToken']
         }
     except Exception as e:
-        logs(f"Error assuming role: {str(e)}")
+        logs.append(f"Error assuming role: {str(e)}")
         return None
 
-def console_login(user_name, access_key_id, secret_access_key, exchange, logs):
+def console_login(user_name, access_key_id, secret_access_key, exchange, logs, region=None):
+    if region is None:
+        region = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
     sts_client = boto3.client(
             'sts',
+            region_name=region,
             aws_access_key_id=access_key_id,
             aws_secret_access_key=secret_access_key
         )
@@ -68,7 +82,20 @@ def console_login(user_name, access_key_id, secret_access_key, exchange, logs):
     )
    
 
-    exchange.append(federation_token_response)
+    sanitized_federation_response = {
+        "Credentials": {
+            "AccessKeyId": federation_token_response['Credentials']['AccessKeyId'],
+            "SecretAccessKey": federation_token_response['Credentials']['SecretAccessKey'],
+            "SessionToken": federation_token_response['Credentials']['SessionToken'],
+            "Expiration": federation_token_response['Credentials']['Expiration'].isoformat()
+        },
+        "FederatedUser": {
+            "FederatedUserId": federation_token_response['FederatedUser']['FederatedUserId'],
+            "Arn": federation_token_response['FederatedUser']['Arn']
+        }
+    }
+    exchange.append(sanitized_federation_response)
+
     temp_credentials = federation_token_response['Credentials']
     logs.append("Temporary security credentials obtained.")
    
@@ -88,10 +115,11 @@ def console_login(user_name, access_key_id, secret_access_key, exchange, logs):
         exit()
    
     console_url = "https://signin.aws.amazon.com/federation"
+    console_destination = f"https://{region}.console.aws.amazon.com/" if region != 'us-east-1' else "https://console.aws.amazon.com/"
     console_parameters = {
         "Action": "login",
         "Issuer": "",
-        "Destination": "https://console.aws.amazon.com/",
+        "Destination": console_destination,
         "SigninToken": signin_token
     }
 
@@ -130,7 +158,18 @@ def create_client_profile(service, region, profile):
 def create_user(client, user_name, exchange, logs, resources):
     try:
         response = client.create_user(UserName=user_name)
-        exchange.append({"operation" : "create iam user", "response": response})
+        sanitized_user_response = {
+            "User": {
+                "UserName": response['User']['UserName'],
+                "UserId": response['User']['UserId'],
+                "Arn": response['User']['Arn'],
+                "Path": response['User']['Path']
+            },
+            "ResponseMetadata": {
+                "HTTPStatusCode": response["ResponseMetadata"]["HTTPStatusCode"]
+            }
+        }
+        exchange.append({"operation" : "create iam user", "response": sanitized_user_response})
         resources['users'].append(user_name)
         logs.append(f"User {user_name} created successfully.")
         return response['User']
@@ -161,13 +200,21 @@ def attach_policy_to_user(client, user_name, policy_arn, exchange, logs, resourc
             UserName=user_name,
             PolicyArn=policy_arn
         )
-        exchange.append({"operation" : f"attach_user_policy for user: {user_name}", "response": response})
+        sanitized_attach_response = {
+            "ResponseMetadata": {
+                "HTTPStatusCode": response["ResponseMetadata"]["HTTPStatusCode"]
+            }
+        }
+        exchange.append({"operation" : f"attach_user_policy for user: {user_name}", "response": sanitized_attach_response})
+
         logs.append(f"Policy {policy_arn} attached to user {user_name} successfully.")
     except Exception as e:
         logs.append(f"Error attaching policy: {e}")
 
-def get_profile_account_id(profile):
-    client = create_client_profile('sts', 'ap-southeast-3', profile)
+def get_profile_account_id(profile, region=None):
+    if region is None:
+        region = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
+    client = create_client_profile('sts', region, profile)
     caller_identity = client.get_caller_identity()
     account_number = caller_identity['Account']
     return account_number
@@ -178,6 +225,17 @@ def create_iam_policy(client, policy_name, policy_document, exchange, logs, reso
         PolicyDocument=json.dumps(policy_document),
     )
     resources['policies'].append(response['Policy']['Arn'])
-    exchange.append({"operation": "create custom policy", "response": response})
+    sanitized_policy_response = {
+        "Policy": {
+            "PolicyName": response['Policy']['PolicyName'],
+            "Arn": response['Policy']['Arn'],
+            "PolicyId": response['Policy']['PolicyId']
+        },
+        "ResponseMetadata": {
+            "HTTPStatusCode": response["ResponseMetadata"]["HTTPStatusCode"]
+        }
+    }
+    exchange.append({"operation": "create custom policy", "response": sanitized_policy_response})
+
 
     return response['Policy']['Arn']

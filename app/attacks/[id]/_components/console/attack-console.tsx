@@ -202,7 +202,7 @@ const AttackConsole = ({ attack, logs, step, setLogs, setStep, onChangeStatus, o
 
       {logs.map((log, index) => (
         <BodyStrongSmallText key={index} fontFamily="Consolas" textAlign="start">
-          $ {log}
+          $ {typeof log === 'string' ? log : JSON.stringify(log)}
         </BodyStrongSmallText>
       ))}
 

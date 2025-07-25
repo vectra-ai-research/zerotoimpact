@@ -50,7 +50,7 @@ class AttackLambdaPriEsc:
             time.sleep(15)
             
             self.step = 3
-            sts_response = assume_role(self.user_access_key, self.user_secret_key, manager_role_arn, manager_role, self.instance["exchange"], self.instance["logs"])
+            sts_response = assume_role(self.user_access_key, self.user_secret_key, manager_role_arn, manager_role, self.instance["exchange"], self.instance["logs"], self.aws_region)
             _replace_string_in_file_and_zip(self.user_name)
             self._create_function_and_invoke(self.id, sts_response, debug_role_arn, self.instance['exchange'], self.instance['logs'], self.instance['resources'])
             self._add_to_disk()
@@ -60,7 +60,7 @@ class AttackLambdaPriEsc:
             time.sleep(10)
 
             self.step = 4
-            console_login(self.user_name, self.user_access_key, self.user_secret_key,self.instance['exchange'], self.instance['logs'])
+            console_login(self.user_name, self.user_access_key, self.user_secret_key,self.instance['exchange'], self.instance['logs'], self.aws_region)
             self._add_to_disk()
 
             self.step = 5
