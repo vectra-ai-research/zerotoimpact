@@ -46,7 +46,7 @@ npm install
 The AWS profile requires AdministratorAccess permission to deploy the vulnerable infrastructure. However, the profile will not be used to execute the attacks 
 
 ***AWS Region Support***
-This application supports multiple AWS regions. Set your desired region using the AWS_DEFAULT_REGION environment variable. The application has been tested with us-east-1 and ap-southeast-3 regions.
+This application supports multiple AWS regions. Set your desired region using the AWS_DEFAULT_REGION environment variable. The application has been tested with **us-east-1** and **ap-southeast-3** regions.
 
 ***Windows***
 ```powershell
