@@ -59,6 +59,27 @@ class Create:
             print(f"Create failed {e}")
             self._add_to_disk()
 
+    def get_latest_amazon_linux_ami(self):
+        """Get the latest Amazon Linux 2 AMI ID for the current region"""
+        ssm_client = create_client_profile('ssm', self.region, self.profile)
+        try:
+            response = ssm_client.get_parameter(
+                Name='/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+            )
+            ami_id = response['Parameter']['Value']
+            self.log_important(f"Using Amazon Linux 2 AMI: {ami_id} for region {self.region}")
+            return ami_id
+        except Exception as e:
+            self.log_important(f"Failed to get latest AMI, using fallback: {e}")
+            # Fallback AMI mapping for common regions
+            ami_mapping = {
+                'us-east-1': 'ami-0f403e3180720dd7e',
+                'ap-southeast-3': 'ami-0df7a207adb9748c7',
+                'us-west-2': 'ami-0c2d3e23b7e7c7c7c',
+                'eu-west-1': 'ami-0c02fb55956c7d316'
+            }
+            return ami_mapping.get(self.region, 'ami-0f403e3180720dd7e')
+
     def _add_to_disk(self):
         add_to_disk(self.filename, self.id, self.status, self.step, self.api_logs, self.important_logs, self.resources)
    
