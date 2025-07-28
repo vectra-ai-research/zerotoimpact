@@ -42,7 +42,8 @@ class Create:
             self._add_to_disk()
 
             self.step = 2
-            self.launch_ec2_instance('ami-0f403e3180720dd7e',"t2.micro", role_name)
+            ami_id = self.get_latest_amazon_linux_ami()
+            self.launch_ec2_instance(ami_id, "t3.micro", role_name)
             self._add_to_disk()
 
             self.step = 3
