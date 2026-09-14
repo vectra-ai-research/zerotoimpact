@@ -15,7 +15,7 @@ from lib.aws_region import resolve_aws_region
 from lib.instance_repo import add_to_disk
 from policy_ransom_exploit.create import Create as PolicyRansomCreate
 from policy_ransom_exploit.s3_ransomware import s3Ransomware
-from snapshot_exfil.attack import get_snapshot_recipient_account_id, redact_snapshot_recipient
+from snapshot_exfil.attack import ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID, redact_snapshot_recipient
 from snapshot_exfil.create import Create as SnapshotExfilCreate
 
 
@@ -158,17 +158,8 @@ class RegionSupportTests(unittest.TestCase):
 
         mock_create_client.assert_called_once_with("ssm", "eu-west-1", "example")
 
-    def test_snapshot_recipient_must_be_a_12_digit_environment_value(self):
-        with patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(RuntimeError, "ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID"):
-                get_snapshot_recipient_account_id()
-
-        with patch.dict(os.environ, {"ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID": "not-an-account"}, clear=True):
-            with self.assertRaisesRegex(ValueError, "12-digit"):
-                get_snapshot_recipient_account_id()
-
-        with patch.dict(os.environ, {"ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID": "000000000000"}, clear=True):
-            self.assertEqual(get_snapshot_recipient_account_id(), "000000000000")
+    def test_snapshot_recipient_is_the_hard_coded_fake_account(self):
+        self.assertEqual(ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID, "000000000000")
 
     def test_snapshot_share_response_redacts_the_recipient(self):
         response = {

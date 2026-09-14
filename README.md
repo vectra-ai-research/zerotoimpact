@@ -48,23 +48,15 @@ The AWS profile requires AdministratorAccess permission to deploy the vulnerable
 ***AWS Region Support***
 The application uses the target AWS Region from `AWS_REGION`, `AWS_DEFAULT_REGION`, or the selected profile's configured region, in that order. Set one of these before starting the application. Resources created by a scenario record their Region, so later attack and destroy actions continue to use the same Region even if the application configuration changes.
 
-The scenarios require the AWS services and instance types they use to be available in the selected Region. IAM is a global service, so an `iam:CreatePolicy` denial is an authorization or SCP issue, not evidence that the configured Region is wrong.
-
-The policy-ransomware scenario uses a new client-provided S3 encryption key (SSE-C) for each run. It emits a `PutObject` that replaces and encrypts one existing object, then `CopyObject` calls that encrypt the remaining objects in place. It does not call KMS, an external helper, or `GetBucketVersioning`; the encryption key is not saved in scenario state or logs.
-
-The RDS snapshot scenario requires a dedicated external recipient account. Set `ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID` to the intended 12-digit account ID before starting its attack phase; it is not stored in the repository.
-
 ***Windows***
 ```powershell
 $env:AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
 $env:AWS_DEFAULT_REGION="eu-west-1"
-$env:ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID="your_12_digit_test_recipient"
 ```
 ***Linux***
 ```bash
 export AWS_DEFAULT_PROFILE="your_aws_profile_to_use"
 export AWS_DEFAULT_REGION="eu-west-1"
-export ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID="your_12_digit_test_recipient"
 ```
 
 **7. Run the Development Server:**

