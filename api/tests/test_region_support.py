@@ -39,7 +39,27 @@ class FakeS3Client:
 class FakeRansomwareS3Client:
     def __init__(self):
         self.copy_object_calls = []
+        self.get_bucket_acl_calls = []
+        self.get_bucket_logging_calls = []
+        self.get_bucket_replication_calls = []
+        self.list_buckets_calls = []
         self.put_object_calls = []
+
+    def list_buckets(self):
+        self.list_buckets_calls.append({})
+        return {"Buckets": []}
+
+    def get_bucket_logging(self, **kwargs):
+        self.get_bucket_logging_calls.append(kwargs)
+        return {}
+
+    def get_bucket_acl(self, **kwargs):
+        self.get_bucket_acl_calls.append(kwargs)
+        return {}
+
+    def get_bucket_replication(self, **kwargs):
+        self.get_bucket_replication_calls.append(kwargs)
+        return {}
 
     def list_objects_v2(self, **kwargs):
         return {
@@ -207,6 +227,11 @@ class RegionSupportTests(unittest.TestCase):
         logs = []
 
         s3Ransomware("access-key", "secret-key", "example-bucket", "eu-west-1", logs, {})
+
+        self.assertEqual(client.list_buckets_calls, [{}])
+        self.assertEqual(client.get_bucket_logging_calls, [{"Bucket": "example-bucket"}])
+        self.assertEqual(client.get_bucket_acl_calls, [{"Bucket": "example-bucket"}])
+        self.assertEqual(client.get_bucket_replication_calls, [{"Bucket": "example-bucket"}])
 
         self.assertEqual(len(client.put_object_calls), 1)
         put_request = client.put_object_calls[0]
